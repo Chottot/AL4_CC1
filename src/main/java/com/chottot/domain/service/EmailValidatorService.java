@@ -7,7 +7,7 @@ public class EmailValidatorService implements IEmailValidatorService {
 
     @Override
     public boolean isEmailAddressValid(EmailAddress emailAddress) {
-        return false;
+        return true;
     }
 
 }

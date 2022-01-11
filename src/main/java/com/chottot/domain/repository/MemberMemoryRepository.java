@@ -1,7 +1,7 @@
 package com.chottot.domain.repository;
 
-import com.chottot.domain.email.EmailAddress;
 import com.chottot.domain.member.Member;
+import com.chottot.domain.member.MemberID;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,28 +15,31 @@ final public class MemberMemoryRepository implements MemberRepository{
     }
 
     @Override
-    public Member get(EmailAddress memberEmailAddress) {
-         return memberList.stream().filter(member1 -> member1.getEmailAddress().equals(memberEmailAddress))
+    public Member get(MemberID key) {
+         return memberList.stream().filter(member1 -> member1.getID().equals(key))
                                     .findAny().orElse(null);
     }
 
     @Override
-    public void add(Member member) {
-        if( get(member.getEmailAddress()) == null){
-            memberList.add(member);
-        }
+    public void add(Member key) {
+        memberList.add(key);
     }
 
     @Override
-    public void update(Member member) {
+    public void update(Member key) {
 
     }
 
     @Override
-    public void remove(EmailAddress memberEmailAddress) {
-        Member memberInList = get(memberEmailAddress);
+    public void remove(MemberID key) {
+        Member memberInList = get(key);
         if( memberInList != null){
             memberList.remove(memberInList);
         }
+    }
+
+    @Override
+    public List<Member> getAll() {
+        return memberList;
     }
 }

@@ -1,25 +1,24 @@
 package com.chottot.domain.member;
 
-import com.chottot.domain.credential.LoginPasswordCredential;
+import com.chottot.core.IEntity;
+import com.chottot.domain.credential.Credential;
 import com.chottot.domain.email.EmailAddress;
 
 import java.time.LocalDate;
 
-final public class Member {
+final public class Member implements IEntity<MemberID> {
 
-    public final static int MEMBER_AGE_MIN = 18;
-
+    private final MemberID id;
     private final String firstName;
     private final String lastName;
-    private final LoginPasswordCredential credential;
-    private final EmailAddress emailAddress;
+    private final Credential credential;
     private final LocalDate birthDate;
 
-    private Member(String firstName, String lastName, LoginPasswordCredential credential, EmailAddress emailAddress, LocalDate birthDate) {
+    public Member(String firstName, String lastName, Credential credential, EmailAddress emailAddress, LocalDate birthDate) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.credential = credential;
-        this.emailAddress = emailAddress;
+        this.id = new MemberID(emailAddress);
         this.birthDate = birthDate;
     }
 
@@ -31,7 +30,7 @@ final public class Member {
         return lastName;
     }
 
-    public LoginPasswordCredential getCredential() {
+    public Credential getCredential() {
         return credential;
     }
 
@@ -40,25 +39,21 @@ final public class Member {
     }
 
     public EmailAddress getEmailAddress() {
-        return emailAddress;
+        return id.getValue();
     }
 
-
-    public Member createMember(String firstName, String lastName, String password, String emailAddress, LocalDate birthDate) {
-        if (firstName == null || firstName.isEmpty()) {
-            throw new IllegalArgumentException("Your first name can't be empty");
-        }
-
-        if (lastName == null || lastName.isEmpty()) {
-            throw new IllegalArgumentException("Your last name can't be empty");
-        }
-
-        EmailAddress email = EmailAddress.createEmailAddress(emailAddress);
-
-        LoginPasswordCredential credential = LoginPasswordCredential.createLoginPasswordCredentialWithEmailAddress(email, password);
-
-        return new Member(firstName, lastName, credential, email, birthDate);
+    @Override
+    public MemberID getID() {
+        return id;
     }
 
-
+    @Override
+    public String toString() {
+        return "Member{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", birthDate=" + birthDate +
+                '}';
+    }
 }

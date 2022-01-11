@@ -1,49 +1,51 @@
 package com.chottot.domain.service;
 
-import com.chottot.domain.email.EmailAddress;
-import com.chottot.domain.email.IEmailValidatorService;
+import com.chottot.domain.member.IMemberValidator;
 import com.chottot.domain.member.Member;
-import com.chottot.domain.credential.LoginPasswordValidator;
+import com.chottot.domain.member.MemberID;
 import com.chottot.domain.repository.MemberRepository;
 
-public class MemberService{
+public class MemberService {
 
     MemberRepository memberRepository;
-    IEmailValidatorService emailValidatorService;
-    LoginPasswordValidator credentialValidator;
+    IMemberValidator memberValidator;
 
-    public MemberService(MemberRepository memberRepository, IEmailValidatorService emailValidatorService, LoginPasswordValidator credentialValidator) {
+    public MemberService(MemberRepository memberRepository, IMemberValidator memberValidator) {
         this.memberRepository = memberRepository;
-        this.emailValidatorService = emailValidatorService;
-        this.credentialValidator = credentialValidator;
+        this.memberValidator = memberValidator;
     }
 
-    public boolean register(Member member){
-        if(emailValidatorService.isEmailAddressValid(member.getEmailAddress()) &&
-           credentialValidator.isValid(member.getCredential()) )
-        {
-            memberRepository.add(member);
-            return true;
-        }
-        return false;
+    public boolean register(Member member) {
+        if (member == null)
+            throw new MemberServiceRegisterNullException();
+        memberValidator.validate(member);
+
+        if (memberRepository.get(member.getID()) != null)
+            throw new MemberServiceRegisterAlreadyExistException(member.getID());
+        memberRepository.add(member);
+
+        return true;
     }
 
-    public Member getByEmail(EmailAddress memberEmailAddress) {
-        return memberRepository.get(memberEmailAddress);
+    public Member getByID(MemberID memberID) {
+        if (memberID == null)
+            throw new MemberServiceIDNullException();
+        Member member = memberRepository.get(memberID);
+
+        if (member == null)
+            throw new MemberServiceMemberDoesNotExistException(memberID);
+
+        return member;
     }
 
-    public void addNewMember(Member member) {
-        if( memberRepository.get(member.getEmailAddress()) == null){
-            memberRepository.add(member);
-        }
-    }
+    public void removeMember(MemberID memberID) {
+        if (memberID == null)
+            throw new MemberServiceIDNullException();
 
-    public void removeMember(Member member) {
-        removeByEmail(member.getEmailAddress());
-    }
+        if (memberRepository.get(memberID) != null)
+            throw new MemberServiceMemberDoesNotExistException(memberID);
 
-    public void removeByEmail(EmailAddress memberEmailAddress){
-        memberRepository.remove(memberEmailAddress);
+        memberRepository.remove(memberID);
     }
 
 }

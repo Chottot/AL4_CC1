@@ -1,12 +1,13 @@
-package com.chottot.domain.credential;
+package com.chottot.domain.credential.LoginPassword;
 
+import com.chottot.domain.credential.Credential;
 import com.chottot.domain.email.EmailAddress;
 
-final public class LoginPasswordCredential {
+final public class LoginPasswordCredential extends Credential {
     private final String login;
     private final String password;
 
-    private LoginPasswordCredential(String login, String password) {
+    public LoginPasswordCredential(String login, String password) {
         this.login = login;
         this.password = password;
     }
