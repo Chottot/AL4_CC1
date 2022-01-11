@@ -1,4 +1,4 @@
-package com.chottot.repository;
+package com.chottot.domain.repository;
 
 public interface IRepository<K, T> {
 

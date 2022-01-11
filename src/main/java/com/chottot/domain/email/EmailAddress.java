@@ -1,6 +1,6 @@
-package com.chottot.email;
+package com.chottot.domain.email;
 
-import com.chottot.service.EmailValidatorService;
+import com.chottot.domain.service.EmailValidatorService;
 
 final public class EmailAddress {
 

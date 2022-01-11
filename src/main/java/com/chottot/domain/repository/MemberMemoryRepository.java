@@ -1,7 +1,7 @@
-package com.chottot.repository;
+package com.chottot.domain.repository;
 
-import com.chottot.email.EmailAddress;
-import com.chottot.member.Member;
+import com.chottot.domain.email.EmailAddress;
+import com.chottot.domain.member.Member;
 
 import java.util.ArrayList;
 import java.util.List;

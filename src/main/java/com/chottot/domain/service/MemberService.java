@@ -1,18 +1,18 @@
-package com.chottot.service;
+package com.chottot.domain.service;
 
-import com.chottot.email.EmailAddress;
-import com.chottot.email.IEmailValidatorService;
-import com.chottot.member.Member;
-import com.chottot.member.PasswordValidator;
-import com.chottot.repository.MemberRepository;
+import com.chottot.domain.email.EmailAddress;
+import com.chottot.domain.email.IEmailValidatorService;
+import com.chottot.domain.member.Member;
+import com.chottot.domain.credential.LoginPasswordValidator;
+import com.chottot.domain.repository.MemberRepository;
 
 public class MemberService{
 
     MemberRepository memberRepository;
     IEmailValidatorService emailValidatorService;
-    PasswordValidator credentialValidator;
+    LoginPasswordValidator credentialValidator;
 
-    public MemberService(MemberRepository memberRepository, IEmailValidatorService emailValidatorService, PasswordValidator credentialValidator) {
+    public MemberService(MemberRepository memberRepository, IEmailValidatorService emailValidatorService, LoginPasswordValidator credentialValidator) {
         this.memberRepository = memberRepository;
         this.emailValidatorService = emailValidatorService;
         this.credentialValidator = credentialValidator;
