@@ -1,4 +1,4 @@
-package com.chottot.trademe.domain.email;
+package com.chottot.trademe.domain.service.email;
 
 public class InvalidEmailException extends RuntimeException{
 }

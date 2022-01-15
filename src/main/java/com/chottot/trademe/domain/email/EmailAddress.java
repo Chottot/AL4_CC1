@@ -1,6 +1,7 @@
 package com.chottot.trademe.domain.email;
 
-import com.chottot.trademe.domain.service.EmailValidatorService;
+import com.chottot.trademe.domain.service.email.EmailValidatorService;
+import com.chottot.trademe.domain.service.email.InvalidEmailException;
 
 import java.util.Objects;
 
@@ -22,7 +23,7 @@ final public class EmailAddress {
     {
         EmailAddress emailAddress = new EmailAddress(email);
 
-        if(validator.isEmailAddressValid(emailAddress)){
+        if(validator.validate(emailAddress)){
             return emailAddress;
         }else{
             throw new InvalidEmailException();

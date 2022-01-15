@@ -1,4 +1,4 @@
-package com.chottot.trademe.domain.service;
+package com.chottot.trademe.domain.service.member;
 
 import com.chottot.trademe.domain.member.IMemberValidator;
 import com.chottot.trademe.domain.member.Member;
@@ -25,7 +25,7 @@ public class MemberService {
 
     public Member register(Member member) {
         if (member == null)
-            throw new MemberServiceRegisterNullException();
+            throw new IllegalArgumentException("member is null");
         memberValidator.validate(member);
 
         if (memberRepository.get(member.getID()) != null)
@@ -37,7 +37,7 @@ public class MemberService {
 
     public Member getByID(MemberID memberID) {
         if (memberID == null)
-            throw new MemberServiceIDNullException();
+            throw new IllegalArgumentException("member id id null");
         Member member = memberRepository.get(memberID);
 
         if (member == null)
@@ -48,9 +48,9 @@ public class MemberService {
 
     public void removeMember(MemberID memberID) {
         if (memberID == null)
-            throw new MemberServiceIDNullException();
+            throw new IllegalArgumentException("member id id null");
 
-        if (memberRepository.get(memberID) != null)
+        if (memberRepository.get(memberID) == null)
             throw new MemberServiceMemberDoesNotExistException(memberID);
 
         memberRepository.remove(memberID);

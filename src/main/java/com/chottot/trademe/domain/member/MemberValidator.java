@@ -3,14 +3,12 @@ package com.chottot.trademe.domain.member;
 import com.chottot.trademe.domain.credential.CredentialWrongTypeException;
 import com.chottot.trademe.domain.credential.ICredentialValidator;
 import com.chottot.trademe.domain.email.IEmailValidatorService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.List;
 
-@Service
 public class MemberValidator implements IMemberValidator {
 
     private final LocalDate currentDate;
@@ -29,32 +27,36 @@ public class MemberValidator implements IMemberValidator {
         this(LocalDate.now(), ageMin, credentialValidator, emailValidatorService);
     }
 
-    @Override
-    public boolean validate(Member member) {
-        if (member == null) return false;
-
-        //get matching credential validator
-        ICredentialValidator credentialValidator = null;
-        for (ICredentialValidator va : iCredentialValidators) {
+    private void validateCredential(Member member){
+        for (ICredentialValidator validator : iCredentialValidators) {
             try {
-                va.canCredentialBeValida(member.getCredential());
-            } catch (CredentialWrongTypeException e) {
-                continue;
+                validator.validate(member.getCredential());
+            } catch (CredentialWrongTypeException ignored) {
             }
-
-            credentialValidator = va;
         }
+    }
 
-        if (credentialValidator == null) {
-            throw new MemberValidatorNoCredentialValidatorException(member.getCredential());
-        }
-        credentialValidator.validate(member.getCredential());
-
+    private void validateAge(Member member){
         if (Period.between(member.getBirthDate(), currentDate).getYears() < ageMin) {
             throw new MemberTooYoungException(ageMin);
         }
+    }
 
-        return emailValidatorService.isEmailAddressValid(member.getEmailAddress());
+    private void validateEmail(Member member){
+        emailValidatorService.validate(member.getEmailAddress());
+    }
+
+    @Override
+    public boolean validate(Member member) {
+        if (member == null) throw new IllegalArgumentException("member to validate is null");
+
+        validateCredential(member);
+
+        validateAge(member);
+
+        validateEmail(member);
+
+        return true;
     }
 
     public static MemberValidator createMemberValidatorWithCurrentDate(LocalDate currentDate, int ageMin, List<ICredentialValidator> credentialValidator, IEmailValidatorService emailValidatorService) {

@@ -7,4 +7,5 @@ public interface IMemberValidator {
 
     boolean validate(Member member);
 
+
 }
