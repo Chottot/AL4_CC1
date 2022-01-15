@@ -3,11 +3,14 @@ package com.chottot.trademe.domain.member;
 import com.chottot.trademe.domain.credential.CredentialWrongTypeException;
 import com.chottot.trademe.domain.credential.ICredentialValidator;
 import com.chottot.trademe.domain.email.IEmailValidatorService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.List;
 
+@Service
 public class MemberValidator implements IMemberValidator {
 
     private final LocalDate currentDate;

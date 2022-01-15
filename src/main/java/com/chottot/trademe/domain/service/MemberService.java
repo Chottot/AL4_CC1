@@ -4,7 +4,11 @@ import com.chottot.trademe.domain.member.IMemberValidator;
 import com.chottot.trademe.domain.member.Member;
 import com.chottot.trademe.domain.member.MemberID;
 import com.chottot.trademe.domain.repository.MemberRepository;
+import org.springframework.stereotype.Service;
 
+import java.util.List;
+
+@Service
 public class MemberService {
 
     MemberRepository memberRepository;
@@ -15,7 +19,11 @@ public class MemberService {
         this.memberValidator = memberValidator;
     }
 
-    public boolean register(Member member) {
+    public List<Member> getAllMembers(){
+        return  memberRepository.getAll();
+    }
+
+    public Member register(Member member) {
         if (member == null)
             throw new MemberServiceRegisterNullException();
         memberValidator.validate(member);
@@ -24,7 +32,7 @@ public class MemberService {
             throw new MemberServiceRegisterAlreadyExistException(member.getID());
         memberRepository.add(member);
 
-        return true;
+        return member;
     }
 
     public Member getByID(MemberID memberID) {

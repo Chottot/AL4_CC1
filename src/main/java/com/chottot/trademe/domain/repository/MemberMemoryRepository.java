@@ -2,10 +2,12 @@ package com.chottot.trademe.domain.repository;
 
 import com.chottot.trademe.domain.member.Member;
 import com.chottot.trademe.domain.member.MemberID;
+import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Repository
 final public class MemberMemoryRepository implements MemberRepository{
 
     private final List<Member> memberList;
